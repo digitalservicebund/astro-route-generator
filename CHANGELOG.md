@@ -7,4 +7,5 @@
 ### ⚙️ Miscellaneous Tasks
 
 - add test pipeline - ([1ccb0b7](https://github.com/digitalservicebund/astro-route-generator/commit/1ccb0b73ed601ef465091c9bf0f9eae2b80c5c78))
+- add changelog - ([9969028](https://github.com/digitalservicebund/astro-route-generator/commit/996902883074b3b14031622ac3c137df98c32eb7))
 
