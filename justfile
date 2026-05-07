@@ -7,6 +7,7 @@ release:
     #!/usr/bin/env bash
     set -e
     VERSION=$(RUST_LOG=error git-cliff --bumped-version)
+    pnpm version "${VERSION#v}" --no-git-tag-version
     git-cliff --bump -o CHANGELOG.md
     git commit -am "chore(release): $VERSION"
     git tag "$VERSION" -m "Release $VERSION"
