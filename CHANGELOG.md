@@ -1,3 +1,9 @@
+## [0.1.2](https://github.com/digitalservicebund/astro-route-generator/compare/0.1.1..0.1.2) - 2026-05-07
+
+### 🐛 Bug Fixes
+
+- exclude dynamic routes - ([b0b468f](https://github.com/digitalservicebund/astro-route-generator/commit/b0b468f4721a3675321fe0dab725a43692e2bc99))
+
 ## [0.1.1](https://github.com/digitalservicebund/astro-route-generator/compare/0.1.0..0.1.1) - 2026-05-07
 
 ### ⚙️ Miscellaneous Tasks
