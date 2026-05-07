@@ -1,3 +1,9 @@
+## [0.1.1](https://github.com/digitalservicebund/astro-route-generator/compare/0.1.0..0.1.1) - 2026-05-07
+
+### ⚙️ Miscellaneous Tasks
+
+- limit permission - ([11d8b51](https://github.com/digitalservicebund/astro-route-generator/commit/11d8b51238bfa9f70abd36c2415edd10c7f7c1ed))
+
 ## [0.1.0] - 2026-05-07
 
 ### 💼 Other
