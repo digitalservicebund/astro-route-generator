@@ -116,6 +116,9 @@ function getFiles(dir: string): string[] {
     .flatMap((entry: Dirent<string>) => {
       const full = path.join(dir, entry.name);
 
+      // ignore dynamic routes / route segments (e.g. [slug]/ or [slug].astro)
+      if (entry.name.startsWith("[")) return [];
+
       // If the entry is a directory, recurse into it and flatten the resulting array
       if (entry.isDirectory()) {
         return getFiles(full);
@@ -123,7 +126,8 @@ function getFiles(dir: string): string[] {
 
       // Only return the file path if it matches our allowed extensions
       // Otherwise, return an empty array (which flatMap will remove)
-      return SUPPORTED_EXTENSIONS_REGEXP.test(entry.name) ? [full] : [];
+      const isPageFile = SUPPORTED_EXTENSIONS_REGEXP.test(entry.name);
+      return isPageFile ? [full] : [];
     });
 }
 

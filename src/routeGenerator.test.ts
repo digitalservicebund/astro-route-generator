@@ -204,6 +204,28 @@ describe("generateRoutes() Integration Hook", () => {
       expect(getWrittenOutput()).not.toContain("image");
     });
 
+    it("ignores dynamic route segments (files and folders starting with '[')", () => {
+      mockPages([
+        {
+          path: "index.astro",
+          frontmatter: 'const frontmatter = { title: "Home" };',
+        },
+        {
+          path: "[slug].astro",
+          frontmatter: 'const frontmatter = { title: "Dynamic" };',
+        },
+        {
+          path: "[id]/index.astro",
+          frontmatter: 'const frontmatter = { title: "Dynamic nested" };',
+        },
+      ]);
+      runBuild();
+
+      expect(getWrittenOutput()).toContain('title: "Home"');
+      expect(getWrittenOutput()).not.toContain("slug");
+      expect(getWrittenOutput()).not.toContain("Dynamic");
+    });
+
     it("omits pages whose metadata cannot be extracted", () => {
       mockPages([
         {
