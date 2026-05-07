@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Install git-cliff
+        uses: taiki-e/install-action@7ea35f098a7369cd23488403f58be9c491a6c55f # v2.77.0
+        with:
+          tool: git-cliff
+
+      - name: Check if release is needed
+        id: check
+        run: |
+          VERSION=$(RUST_LOG=error git-cliff --bumped-version 2>/dev/null || echo "")
+          CURRENT=$(git describe --tags --abbrev=0 2>/dev/null || echo "none")
+          if [ "$VERSION" != "$CURRENT" ] && [ -n "$VERSION" ]; then
+            echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
+            echo "RELEASE=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "RELEASE=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Bump version, update changelog, commit, and tag
+        if: steps.check.outputs.RELEASE == 'true'
+        env:
+          VERSION: ${{ steps.check.outputs.VERSION }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git-cliff --bump -o CHANGELOG.md
+          git commit -am "chore(release): $VERSION"
+          git tag "$VERSION" -m "Release $VERSION"
+          git push origin main --follow-tags
+
+      - name: Create GitHub Release
+        if: steps.check.outputs.RELEASE == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.check.outputs.VERSION }}
+        run: |
+          NOTES=$(git-cliff --latest --strip all)
+          gh release create "$VERSION" --title "$VERSION" --notes "$NOTES"
+
+      # - name: Update floating major version tag
+      #   if: steps.check.outputs.RELEASE == 'true'
+      #   env:
+      #     VERSION: ${{ steps.check.outputs.VERSION }}
+      #   run: |
+      #     MAJOR=$(echo "$VERSION" | cut -d. -f1)
+      #     git tag -f "$MAJOR" "$VERSION"
+      #     git push origin "$MAJOR" --force

@@ -1,0 +1,25 @@
+{
+  "name": "astro-route-generator",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "astro": ">=4.0.0"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "typescript": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "astro": "^6.2.2",
+    "vitest": "^4.1.5"
+  }
+}
