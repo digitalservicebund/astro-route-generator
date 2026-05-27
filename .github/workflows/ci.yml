@@ -44,7 +44,7 @@ jobs:
           version: 11
 
       - name: Install git-cliff
-        uses: taiki-e/install-action@3235f8901fd37ffed0052b276cec25a362fb82e9 # v2.77.7
+        uses: taiki-e/install-action@60ae4ce63c7aeb6e96d7f572c1ec7fafbb17ca80 # v2.79.10
         with:
           tool: git-cliff
 
