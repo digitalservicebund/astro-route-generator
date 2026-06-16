@@ -15,11 +15,11 @@
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
-    "typescript": "^6.0.0"
+    "typescript": "^6.0.3"
   },
   "devDependencies": {
     "@types/node": "^25.9.3",
-    "astro": "^6.2.2",
-    "vitest": "^4.1.8"
+    "astro": "^6.4.7",
+    "vitest": "^4.1.9"
   }
 }
