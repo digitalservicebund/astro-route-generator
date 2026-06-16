@@ -1,10 +1,23 @@
-import matter from "gray-matter";
+import yaml from "js-yaml";
 import ts from "typescript";
 import type { RouteMeta } from "../routeGenerator";
 
 type RouteMetaKey = keyof RouteMeta;
 type RouteMetaValue = string | boolean | number;
 type RouteMetaInput = Partial<Record<RouteMetaKey, RouteMetaValue>>;
+
+// this is the same Regex Astro uses internally to extract frontmatter
+const frontmatterRE =
+  /(?:^\uFEFF?|^\s*\n)(?:---|\+\+\+)([\s\S]*?\n)(?:---|\+\+\+)/;
+
+function parseFrontmatter(raw: string): Record<string, unknown> {
+  const match = frontmatterRE.exec(raw);
+  if (!match) return {};
+  const parsed = yaml.load(match[1]);
+  return parsed && typeof parsed === "object"
+    ? (parsed as Record<string, unknown>)
+    : {};
+}
 
 const ROUTE_META_KEYS = [
   "title",
@@ -21,7 +34,7 @@ function isRouteMetaKey(key: string): key is RouteMetaKey {
 export function extractMeta(file: string, raw: string): RouteMeta | null {
   const data = file.endsWith(".astro")
     ? extractAstroRouteMeta(file, raw)
-    : (matter(raw).data as RouteMetaInput);
+    : (parseFrontmatter(raw) as RouteMetaInput);
 
   const title = typeof data.title === "string" ? data.title : undefined;
   if (!title) return null;
@@ -36,7 +49,7 @@ export function extractMeta(file: string, raw: string): RouteMeta | null {
 }
 
 function extractAstroRouteMeta(file: string, raw: string): RouteMetaInput {
-  const frontmatterBlock = /^---\r?\n([\s\S]*?)\r?\n---/.exec(raw)?.[1];
+  const frontmatterBlock = frontmatterRE.exec(raw)?.[1];
   if (!frontmatterBlock) return {};
 
   const sourceFile = ts.createSourceFile(
