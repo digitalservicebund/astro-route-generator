@@ -90,4 +90,45 @@ const frontmatter = "not-an-object";
 ---`;
     expect(() => extractMeta("bad.astro", badAstro)).toThrow();
   });
+
+  it.each(["src/pages/example.md", "src/pages/example.mdx"])(
+    "reads route metadata from %s YAML frontmatter",
+    (file) => {
+      const meta = extractMeta(
+        file,
+        `---
+title: Example
+sitemap: false
+isStagingOnly: true
+navOrder: 5
+navLabel: Navigation label
+---
+`,
+      );
+
+      expect(meta).toEqual({
+        title: "Example",
+        sitemap: false,
+        isStagingOnly: true,
+        navOrder: 5,
+        navLabel: "Navigation label",
+      });
+    },
+  );
+
+  it.each(["src/pages/example.md", "src/pages/example.mdx"])(
+    "returns null for %s with no frontmatter",
+    (file) => {
+      expect(extractMeta(file, "# Hello world\n")).toBeNull();
+    },
+  );
+
+  it.each(["src/pages/example.md", "src/pages/example.mdx"])(
+    "returns null for %s with frontmatter but no title",
+    (file) => {
+      expect(
+        extractMeta(file, `---\nnavOrder: 1\n---\n`),
+      ).toBeNull();
+    },
+  );
 });
