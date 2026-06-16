@@ -1,3 +1,9 @@
+## [0.1.4](https://github.com/digitalservicebund/astro-route-generator/compare/0.1.3..0.1.4) - 2026-06-16
+
+### 🧪 Testing
+
+- **extractRouteMeta:** add tests for .md/.mdx frontmatter - ([e935064](https://github.com/digitalservicebund/astro-route-generator/commit/e9350642dbed4c6e2c863db6c3bf06a0696bfc6e))
+
 ## [0.1.3](https://github.com/digitalservicebund/astro-route-generator/compare/0.1.2..0.1.3) - 2026-06-16
 
 ### 💼 Other
