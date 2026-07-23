@@ -1,3 +1,22 @@
+## [0.1.5](https://github.com/digitalservicebund/astro-route-generator/compare/0.1.4..0.1.5) - 2026-07-23
+
+### 💼 Other
+
+- **deps:** bump taiki-e/install-action from 2.81.11 to 2.84.1 (#84) - ([5273803](https://github.com/digitalservicebund/astro-route-generator/commit/52738035cc78d33d748ff7f875ba5157aab2d9b7))
+- **deps:** bump actions/checkout from 6.0.3 to 7.0.1 (#81) - ([ef84b05](https://github.com/digitalservicebund/astro-route-generator/commit/ef84b055d0ab68be36455ccf0b1936f7a499cf26))
+- **deps:** bump actions/setup-node from 6.4.0 to 7.0.0 (#75) - ([011226c](https://github.com/digitalservicebund/astro-route-generator/commit/011226c421751c048ecfbb0e904e0c66e7073408))
+- **deps-dev:** bump astro from 6.4.7 to 6.4.8 (#52) - ([39be4ab](https://github.com/digitalservicebund/astro-route-generator/commit/39be4abcb013e63fe4d1c9d1cb14cfe9ce840c6c))
+- **deps-dev:** bump vitest from 4.1.9 to 4.1.10 (#70) - ([a321f5a](https://github.com/digitalservicebund/astro-route-generator/commit/a321f5a71131883ba94c3e38b740a15c60760742))
+
+### ⚙️ Miscellaneous Tasks
+
+- **justfile:** rm manual release cmd - ([d3f1b2b](https://github.com/digitalservicebund/astro-route-generator/commit/d3f1b2be1f87780ad02dbc7c9f2afbc135c15f2e))
+- pin pnpm version in package.json - ([2bfded6](https://github.com/digitalservicebund/astro-route-generator/commit/2bfded6c59be7f990f1b202be33ab0c4c6acea8a))
+- add concurrency and tag checks - ([ff3e359](https://github.com/digitalservicebund/astro-route-generator/commit/ff3e359d3ba1601dfa793830c06cb12be538f707))
+- use pnpm version from package.json - ([2a3983a](https://github.com/digitalservicebund/astro-route-generator/commit/2a3983a5538fd7b7d29bfdc9dfd3e80c1a75bc48))
+- use pnpm version from package.json - ([df5fc57](https://github.com/digitalservicebund/astro-route-generator/commit/df5fc57770dede0293798a33d838719714d86827))
+- trigger release - ([e7d0b45](https://github.com/digitalservicebund/astro-route-generator/commit/e7d0b45320eea6f1be2bf6826386524e06ab62ac))
+
 ## [0.1.4](https://github.com/digitalservicebund/astro-route-generator/compare/0.1.3..0.1.4) - 2026-06-16
 
 ### 🧪 Testing
