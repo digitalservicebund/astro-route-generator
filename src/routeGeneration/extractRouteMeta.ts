@@ -1,4 +1,4 @@
-import yaml from "js-yaml";
+import { load } from "js-yaml";
 import ts from "typescript";
 import type { RouteMeta } from "../routeGenerator";
 
@@ -13,7 +13,7 @@ const frontmatterRE =
 function parseFrontmatter(raw: string): Record<string, unknown> {
   const match = frontmatterRE.exec(raw);
   if (!match) return {};
-  const parsed = yaml.load(match[1]);
+  const parsed = load(match[1]);
   return parsed && typeof parsed === "object"
     ? (parsed as Record<string, unknown>)
     : {};
