@@ -1,3 +1,11 @@
+## [0.1.13](https://github.com/digitalservicebund/astro-route-generator/compare/0.1.12..0.1.13) - 2026-08-31
+
+### 💼 Other
+
+- **deps:** bump taiki-e/install-action from 2.86.5 to 2.86.6 (#108) - ([52f4175](https://github.com/digitalservicebund/astro-route-generator/commit/52f41757e8b01b7da67a96c173c8d9b63d934462))
+- **deps:** bump taiki-e/install-action from 2.86.6 to 2.86.7 (#109) - ([f9d4df3](https://github.com/digitalservicebund/astro-route-generator/commit/f9d4df33f53219811d0c608c3b82189b8158efbf))
+- **deps:** bump dependencies - ([a6abb28](https://github.com/digitalservicebund/astro-route-generator/commit/a6abb28f58c6f8d9c9286bfd0de7bb25185930ef))
+
 ## [0.1.12](https://github.com/digitalservicebund/astro-route-generator/compare/0.1.11..0.1.12) - 2026-08-26
 
 ### 💼 Other
