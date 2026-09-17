@@ -81,7 +81,12 @@ export function generateRoutes({
             downloadsDir && file.startsWith(path.resolve(downloadsDir));
           if (isDownloadFile) {
             console.log(`Download registry generation triggered for ${file}`);
-            generateDownloads(downloadsDir, downloadsOutput, baseUrl, publicDir);
+            generateDownloads(
+              downloadsDir,
+              downloadsOutput,
+              baseUrl,
+              publicDir,
+            );
           }
         });
       },
@@ -263,7 +268,14 @@ export function getParentRouteKey(routePath: string): string | null {
 }
 
 export function toDownloadKey(relativePath: string): string {
-  return toRouteKey(relativePath.replace(/\.[^./]+$/, ""));
+  const extensionMatch = relativePath.match(/\.([^./]+)$/);
+  if (!extensionMatch) return toRouteKey(relativePath);
+
+  // Keep the extension as its own lowercase, underscore-joined suffix
+  // instead of dropping it, so files like "test.json" and "test.csv"
+  // don't collide on the same key.
+  const base = relativePath.slice(0, -extensionMatch[0].length);
+  return `${toRouteKey(base)}_${extensionMatch[1].toLowerCase()}`;
 }
 
 const ROUTE_TYPE = `export type Route = {

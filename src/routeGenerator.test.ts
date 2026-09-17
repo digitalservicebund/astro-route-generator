@@ -61,7 +61,7 @@ function hasFrontmatter(file: MockFile): file is MockPageFile {
 function fileContent(file: MockFile): string {
   return hasFrontmatter(file)
     ? createPageWithFrontmatter(file.frontmatter)
-    : file.content ?? "";
+    : (file.content ?? "");
 }
 
 // Mocks fs.readdirSync/readFileSync/existsSync across one or more virtual
@@ -113,7 +113,10 @@ function mockPages(files: MockFile[]) {
   mockFileTrees([{ root: PAGES_ROOT, files }]);
 }
 
-function mockPagesAndDownloads(pageFiles: MockFile[], downloadFiles: MockFile[]) {
+function mockPagesAndDownloads(
+  pageFiles: MockFile[],
+  downloadFiles: MockFile[],
+) {
   mockFileTrees([
     { root: PAGES_ROOT, files: pageFiles },
     { root: DOWNLOADS_ROOT, files: downloadFiles },
@@ -421,36 +424,44 @@ describe("generateRoutes() Download Registry Hook", () => {
   });
 
   it("generates a DownloadRoute for every file found in the downloads directory", () => {
-    mockPagesAndDownloads(
-      [],
-      [{ path: "Prinzipien-Poster.pdf", content: "" }],
-    );
-    runDownloadsBuild();
-
-    const output = getWrittenOutputFor(DOWNLOADS_OUTPUT);
-    expect(output).toContain("export const prinzipienPoster: DownloadRoute = {");
-    expect(output).toContain('path: "/downloads/Prinzipien-Poster.pdf"');
-  });
-
-  it("recursively scans nested folders within the downloads directory", () => {
-    mockPagesAndDownloads(
-      [],
-      [{ path: "sub/nested-file.pdf", content: "" }],
-    );
+    mockPagesAndDownloads([], [{ path: "Prinzipien-Poster.pdf", content: "" }]);
     runDownloadsBuild();
 
     const output = getWrittenOutputFor(DOWNLOADS_OUTPUT);
     expect(output).toContain(
-      "export const sub_nestedFile: DownloadRoute = {",
+      "export const prinzipienPoster_pdf: DownloadRoute = {",
+    );
+    expect(output).toContain('path: "/downloads/Prinzipien-Poster.pdf"');
+  });
+
+  it("recursively scans nested folders within the downloads directory", () => {
+    mockPagesAndDownloads([], [{ path: "sub/nested-file.pdf", content: "" }]);
+    runDownloadsBuild();
+
+    const output = getWrittenOutputFor(DOWNLOADS_OUTPUT);
+    expect(output).toContain(
+      "export const sub_nestedFile_pdf: DownloadRoute = {",
     );
     expect(output).toContain('path: "/downloads/sub/nested-file.pdf"');
   });
 
-  it("bakes the configured Astro base path into serialized download paths", () => {
+  it("does not collide when files share a base name but differ by extension", () => {
     mockPagesAndDownloads(
       [],
-      [{ path: "Prinzipien-Poster.pdf", content: "" }],
+      [
+        { path: "test.json", content: "" },
+        { path: "test.csv", content: "" },
+      ],
     );
+    runDownloadsBuild();
+
+    const output = getWrittenOutputFor(DOWNLOADS_OUTPUT);
+    expect(output).toContain("export const test_json: DownloadRoute = {");
+    expect(output).toContain("export const test_csv: DownloadRoute = {");
+  });
+
+  it("bakes the configured Astro base path into serialized download paths", () => {
+    mockPagesAndDownloads([], [{ path: "Prinzipien-Poster.pdf", content: "" }]);
     runDownloadsBuild("/zfl-website/previews/test-branch");
 
     expect(getWrittenOutputFor(DOWNLOADS_OUTPUT)).toContain(
@@ -462,8 +473,8 @@ describe("generateRoutes() Download Registry Hook", () => {
     mockPagesAndDownloads(
       [],
       [
-        { path: "Photo.pdf", content: "" },
-        { path: "Photo.png", content: "" },
+        { path: "Photo-Report.pdf", content: "" },
+        { path: "Photo_Report.pdf", content: "" },
       ],
     );
 
@@ -471,10 +482,7 @@ describe("generateRoutes() Download Registry Hook", () => {
   });
 
   it("triggers download registry regeneration during astro:build:start", () => {
-    mockPagesAndDownloads(
-      [],
-      [{ path: "Prinzipien-Poster.pdf", content: "" }],
-    );
+    mockPagesAndDownloads([], [{ path: "Prinzipien-Poster.pdf", content: "" }]);
     runDownloadsBuild();
 
     expect(fs.writeFileSync).toHaveBeenCalledWith(
@@ -533,9 +541,7 @@ describe("serializeDownloadsModule", () => {
       "/",
     );
 
-    expect(output).toContain(
-      'path: "/downloads/A \\"quoted\\" \\\\ path.pdf"',
-    );
+    expect(output).toContain('path: "/downloads/A \\"quoted\\" \\\\ path.pdf"');
   });
 
   it("bakes the base URL into serialized download paths", () => {
@@ -555,16 +561,18 @@ describe("serializeDownloadsModule", () => {
 // =============================================================================
 
 describe("toDownloadKey", () => {
-  it("converts a file name to camelCase and strips the extension", () => {
-    expect(toDownloadKey("/Prinzipien-Poster.pdf")).toBe("prinzipienPoster");
+  it("converts a file name to camelCase and appends the extension", () => {
+    expect(toDownloadKey("/Prinzipien-Poster.pdf")).toBe(
+      "prinzipienPoster_pdf",
+    );
   });
 
   it("joins nested folder segments with underscores", () => {
-    expect(toDownloadKey("/sub/nested-file.pdf")).toBe("sub_nestedFile");
+    expect(toDownloadKey("/sub/nested-file.pdf")).toBe("sub_nestedFile_pdf");
   });
 
-  it("drops unsupported characters while stripping the extension", () => {
-    expect(toDownloadKey("/2026-report.pdf")).toBe("2026Report");
+  it("drops unsupported characters while keeping the extension", () => {
+    expect(toDownloadKey("/2026-report.pdf")).toBe("2026Report_pdf");
   });
 
   it("handles files without an extension", () => {
@@ -573,8 +581,17 @@ describe("toDownloadKey", () => {
 
   it("transliterates German umlauts instead of dropping them", () => {
     expect(toDownloadKey("/Checkliste-Interviewführung.docx")).toBe(
-      "checklisteInterviewfuehrung",
+      "checklisteInterviewfuehrung_docx",
     );
+  });
+
+  it("produces distinct keys for files that only differ by extension", () => {
+    expect(toDownloadKey("/test.json")).toBe("test_json");
+    expect(toDownloadKey("/test.csv")).toBe("test_csv");
+  });
+
+  it("lowercases the extension", () => {
+    expect(toDownloadKey("/test.JSON")).toBe("test_json");
   });
 });
 

@@ -126,9 +126,7 @@ navLabel: Navigation label
   it.each(["src/pages/example.md", "src/pages/example.mdx"])(
     "returns null for %s with frontmatter but no title",
     (file) => {
-      expect(
-        extractMeta(file, `---\nnavOrder: 1\n---\n`),
-      ).toBeNull();
+      expect(extractMeta(file, `---\nnavOrder: 1\n---\n`)).toBeNull();
     },
   );
 });
