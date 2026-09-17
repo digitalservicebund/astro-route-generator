@@ -46,17 +46,19 @@ If `downloadsDir` is set, the integration also recursively scans that directory
 and writes a `DownloadRoute` registry with one export per file:
 
 ```ts
-import { prinzipienPoster } from "@/config/downloads";
+import { prinzipienPoster_pdf } from "@/config/downloads";
 
-prinzipienPoster.path; // "/downloads/Prinzipien-Poster.pdf"
+prinzipienPoster_pdf.path; // "/downloads/Prinzipien-Poster.pdf"
 ```
 
 The export key is derived the same way as route keys — from the file's path
-relative to `downloadsDir`, camelCased, with nested folders joined by `_`
-(e.g. `sub/nested-file.pdf` → `sub_nestedFile`). The served `path` is resolved
-relative to Astro's `publicDir`, so it includes any folder segments between
-`publicDir` and `downloadsDir` (e.g. `downloads/` above). Generation throws if
-two files normalize to the same key.
+relative to `downloadsDir`, camelCased, with nested folders joined by `_` —
+plus the file's extension appended as a lowercase `_`-suffix (e.g.
+`sub/nested-file.pdf` → `sub_nestedFile_pdf`), so files that share a base name
+but differ only by extension (e.g. `test.json` and `test.csv`) don't collide.
+The served `path` is resolved relative to Astro's `publicDir`, so it includes
+any folder segments between `publicDir` and `downloadsDir` (e.g. `downloads/`
+above). Generation throws if two files still normalize to the same key.
 
 ## Page metadata
 
