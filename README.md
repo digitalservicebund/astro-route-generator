@@ -83,3 +83,20 @@ At build time (and during dev when files change), the integration:
 5. Writes a fully typed, `as const` TypeScript module to `output`
 
 The generated file should be committed to your repository. Do not edit it manually — it will be overwritten on the next build.
+
+## Development
+
+To develop and verify changes against a real project (e.g. `zfl-website`), link this package locally with pnpm instead of installing it from GitHub:
+
+```sh
+# in the consuming project (e.g. zfl-website)
+pnpm link ../astro-route-generator
+```
+
+This symlinks the consuming project's `node_modules/astro-route-generator` to your local checkout, so edits here take effect immediately without publishing or bumping a tag.
+
+To undo, in the consuming project:
+
+```sh
+pnpm unlink astro-route-generator
+```
