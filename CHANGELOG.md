@@ -1,3 +1,9 @@
+## [0.2.1](https://github.com/digitalservicebund/astro-route-generator/compare/0.2.0..0.2.1) - 2026-09-17
+
+### ⚙️ Miscellaneous Tasks
+
+- handle umlauts in 'toRouteKey' - ([e1730d2](https://github.com/digitalservicebund/astro-route-generator/commit/e1730d289d8eaebe6d6a253fd9034387b1458962))
+
 ## [0.2.0](https://github.com/digitalservicebund/astro-route-generator/compare/0.1.15..0.2.0) - 2026-09-17
 
 ### 🚀 Features
