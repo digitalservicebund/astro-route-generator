@@ -1,3 +1,13 @@
+## [0.2.2](https://github.com/digitalservicebund/astro-route-generator/compare/0.2.1..0.2.2) - 2026-09-17
+
+### 💼 Other
+
+- **deps:** bump dependencies - ([54c0193](https://github.com/digitalservicebund/astro-route-generator/commit/54c019386ba2ce85813d08fbb1f7fd7b6bccb347))
+
+### ⚙️ Miscellaneous Tasks
+
+- add oxlint - ([78329e8](https://github.com/digitalservicebund/astro-route-generator/commit/78329e8be5dbda5b335cabaf036cd8072614b6c6))
+
 ## [0.2.1](https://github.com/digitalservicebund/astro-route-generator/compare/0.2.0..0.2.1) - 2026-09-17
 
 ### ⚙️ Miscellaneous Tasks
