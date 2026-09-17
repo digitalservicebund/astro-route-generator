@@ -19,9 +19,9 @@
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
-    "@types/node": "^26.5.1",
+    "@types/node": "^26.6.1",
     "astro": "^7.3.2",
-    "vitest": "^5.0.0"
+    "vitest": "^5.0.1"
   },
-  "packageManager": "pnpm@12.3.4"
+  "packageManager": "pnpm@12.4.2"
 }
