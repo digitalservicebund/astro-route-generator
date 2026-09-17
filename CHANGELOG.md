@@ -1,3 +1,9 @@
+## [0.2.4](https://github.com/digitalservicebund/astro-route-generator/compare/0.2.3..0.2.4) - 2026-09-17
+
+### 📚 Documentation
+
+- **readme:** upd download example - ([f915e7c](https://github.com/digitalservicebund/astro-route-generator/commit/f915e7c3c61ee75e8033223a789cbd8b35843e74))
+
 ## [0.2.3](https://github.com/digitalservicebund/astro-route-generator/compare/0.2.2..0.2.3) - 2026-09-17
 
 ### 🐛 Bug Fixes
