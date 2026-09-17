@@ -1,11 +1,14 @@
 import fs from "node:fs";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   escapeStringLiteral,
   generateRoutes,
   getParentRouteKey,
+  serializeDownloadsModule,
   serializeRoutesModule,
+  toDownloadKey,
   toExportName,
   toRouteKey,
 } from "./routeGenerator";
@@ -16,16 +19,22 @@ vi.mock("node:fs");
 // Test Harness
 // =============================================================================
 // These helpers keep the integration tests compact:
-// - `mockPages()` simulates a small pages directory tree in memory.
+// - `mockPages()` / `mockPagesAndDownloads()` simulate directory trees in memory.
 // - `runBuild()` drives the Astro hooks the integration registers.
 
 const PAGES_DIR = "src/pages";
 const OUTPUT_FILE = "src/routes.ts";
 const PAGES_ROOT = path.resolve(PAGES_DIR);
 
+const DOWNLOADS_DIR = "public/downloads";
+const DOWNLOADS_OUTPUT = "src/config/downloads.ts";
+const DOWNLOADS_ROOT = path.resolve(DOWNLOADS_DIR);
+const PUBLIC_ROOT = path.resolve("public");
+
 type MockFile = {
   path: string;
   frontmatter?: string;
+  content?: string;
 };
 
 type MockPageFile = MockFile & {
@@ -49,25 +58,36 @@ function hasFrontmatter(file: MockFile): file is MockPageFile {
   return file.frontmatter !== undefined;
 }
 
-function mockPages(files: MockFile[]) {
+function fileContent(file: MockFile): string {
+  return hasFrontmatter(file)
+    ? createPageWithFrontmatter(file.frontmatter)
+    : file.content ?? "";
+}
+
+// Mocks fs.readdirSync/readFileSync/existsSync across one or more virtual
+// directory trees, each rooted at an absolute path.
+function mockFileTrees(trees: { root: string; files: MockFile[] }[]) {
   const contents = new Map(
-    files
-      .filter(hasFrontmatter)
-      .map((file) => [
-        path.join(PAGES_ROOT, file.path),
-        createPageWithFrontmatter(file.frontmatter),
-      ]),
+    trees.flatMap(({ root, files }) =>
+      files.map((file) => [path.join(root, file.path), fileContent(file)]),
+    ),
   );
 
   vi.mocked(fs.existsSync).mockReturnValue(true);
   vi.mocked(fs.readdirSync).mockImplementation((dir) => {
+    const dirStr = String(dir);
+    const tree = trees.find(
+      ({ root }) => dirStr === root || dirStr.startsWith(root + path.sep),
+    );
+    if (!tree) return [] as unknown as ReturnType<typeof fs.readdirSync>;
+
     const normalizedDir = path
-      .relative(PAGES_ROOT, String(dir))
+      .relative(tree.root, dirStr)
       .replaceAll("\\", "/");
     const prefix = normalizedDir ? `${normalizedDir}/` : "";
     const children = new Map<string, boolean>();
 
-    for (const file of files) {
+    for (const file of tree.files) {
       if (!file.path.startsWith(prefix)) continue;
 
       const remainder = file.path.slice(prefix.length);
@@ -89,18 +109,57 @@ function mockPages(files: MockFile[]) {
   });
 }
 
+function mockPages(files: MockFile[]) {
+  mockFileTrees([{ root: PAGES_ROOT, files }]);
+}
+
+function mockPagesAndDownloads(pageFiles: MockFile[], downloadFiles: MockFile[]) {
+  mockFileTrees([
+    { root: PAGES_ROOT, files: pageFiles },
+    { root: DOWNLOADS_ROOT, files: downloadFiles },
+  ]);
+}
+
 function createIntegration() {
   return generateRoutes({ pagesDir: PAGES_DIR, output: OUTPUT_FILE });
 }
 
-function runBuild(base = "/") {
+function createIntegrationWithDownloads() {
+  return generateRoutes({
+    pagesDir: PAGES_DIR,
+    output: OUTPUT_FILE,
+    downloadsDir: DOWNLOADS_DIR,
+    downloadsOutput: DOWNLOADS_OUTPUT,
+  });
+}
+
+function runBuild(base = "/", publicDir = PUBLIC_ROOT) {
   const integration = createIntegration();
-  integration.hooks["astro:config:done"]?.({ config: { base } } as never);
-  integration.hooks["astro:build:start"]?.({ config: { base } } as never);
+  const hookArg = {
+    config: { base, publicDir: pathToFileURL(publicDir) },
+  } as never;
+  integration.hooks["astro:config:done"]?.(hookArg);
+  integration.hooks["astro:build:start"]?.(hookArg);
+}
+
+function runDownloadsBuild(base = "/", publicDir = PUBLIC_ROOT) {
+  const integration = createIntegrationWithDownloads();
+  const hookArg = {
+    config: { base, publicDir: pathToFileURL(publicDir) },
+  } as never;
+  integration.hooks["astro:config:done"]?.(hookArg);
+  integration.hooks["astro:build:start"]?.(hookArg);
 }
 
 function getWrittenOutput() {
   return vi.mocked(fs.writeFileSync).mock.calls.at(-1)?.[1] as string;
+}
+
+function getWrittenOutputFor(outputFile: string) {
+  const call = vi
+    .mocked(fs.writeFileSync)
+    .mock.calls.find(([file]) => file === path.resolve(outputFile));
+  return call?.[1] as string | undefined;
 }
 
 // =============================================================================
@@ -337,6 +396,179 @@ describe("generateRoutes() Integration Hook", () => {
       expect(getWrittenOutput()).toContain("export const _2026News = {");
       expect(getWrittenOutput()).toContain('key: "2026News"');
     });
+  });
+});
+
+// =============================================================================
+// Integration Tests: Download Registry Generation Hook
+// =============================================================================
+
+describe("generateRoutes() Download Registry Hook", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("does not generate a downloads registry when downloadsDir is not specified", () => {
+    mockPages([
+      {
+        path: "index.astro",
+        frontmatter: 'const frontmatter = { title: "Home" };',
+      },
+    ]);
+    runBuild();
+
+    expect(getWrittenOutputFor(DOWNLOADS_OUTPUT)).toBeUndefined();
+  });
+
+  it("generates a DownloadRoute for every file found in the downloads directory", () => {
+    mockPagesAndDownloads(
+      [],
+      [{ path: "Prinzipien-Poster.pdf", content: "" }],
+    );
+    runDownloadsBuild();
+
+    const output = getWrittenOutputFor(DOWNLOADS_OUTPUT);
+    expect(output).toContain("export const prinzipienPoster: DownloadRoute = {");
+    expect(output).toContain('path: "/downloads/Prinzipien-Poster.pdf"');
+  });
+
+  it("recursively scans nested folders within the downloads directory", () => {
+    mockPagesAndDownloads(
+      [],
+      [{ path: "sub/nested-file.pdf", content: "" }],
+    );
+    runDownloadsBuild();
+
+    const output = getWrittenOutputFor(DOWNLOADS_OUTPUT);
+    expect(output).toContain(
+      "export const sub_nestedFile: DownloadRoute = {",
+    );
+    expect(output).toContain('path: "/downloads/sub/nested-file.pdf"');
+  });
+
+  it("bakes the configured Astro base path into serialized download paths", () => {
+    mockPagesAndDownloads(
+      [],
+      [{ path: "Prinzipien-Poster.pdf", content: "" }],
+    );
+    runDownloadsBuild("/zfl-website/previews/test-branch");
+
+    expect(getWrittenOutputFor(DOWNLOADS_OUTPUT)).toContain(
+      'path: "/zfl-website/previews/test-branch/downloads/Prinzipien-Poster.pdf"',
+    );
+  });
+
+  it("throws when two files normalize to the same download key", () => {
+    mockPagesAndDownloads(
+      [],
+      [
+        { path: "Photo.pdf", content: "" },
+        { path: "Photo.png", content: "" },
+      ],
+    );
+
+    expect(() => runDownloadsBuild()).toThrow();
+  });
+
+  it("triggers download registry regeneration during astro:build:start", () => {
+    mockPagesAndDownloads(
+      [],
+      [{ path: "Prinzipien-Poster.pdf", content: "" }],
+    );
+    runDownloadsBuild();
+
+    expect(fs.writeFileSync).toHaveBeenCalledWith(
+      path.resolve(DOWNLOADS_OUTPUT),
+      expect.stringContaining("prinzipienPoster"),
+    );
+  });
+});
+
+// =============================================================================
+// Unit Tests: Downloads Module Serialization
+// =============================================================================
+
+describe("serializeDownloadsModule", () => {
+  it("sorts downloads by key before serializing", () => {
+    const output = serializeDownloadsModule(
+      [
+        { key: "zwei", path: "/downloads/zwei.pdf" },
+        { key: "eins", path: "/downloads/eins.pdf" },
+      ],
+      "/",
+    );
+
+    expect(output.indexOf("export const eins")).toBeLessThan(
+      output.indexOf("export const zwei"),
+    );
+  });
+
+  it("emits a DownloadRoute type and typed const exports", () => {
+    const output = serializeDownloadsModule(
+      [{ key: "prinzipienPoster", path: "/downloads/Prinzipien-Poster.pdf" }],
+      "/",
+    );
+
+    expect(output).toContain("export type DownloadRoute = {");
+    expect(output).toContain("readonly path: string;");
+    expect(output).toContain(
+      "export const prinzipienPoster: DownloadRoute = {",
+    );
+    expect(output).toContain('path: "/downloads/Prinzipien-Poster.pdf"');
+    expect(output).toContain("} as const;");
+  });
+
+  it("prefixes invalid identifiers", () => {
+    const output = serializeDownloadsModule(
+      [{ key: "2026Report", path: "/downloads/2026-report.pdf" }],
+      "/",
+    );
+
+    expect(output).toContain("export const _2026Report: DownloadRoute = {");
+  });
+
+  it("escapes quotes and backslashes in serialized paths", () => {
+    const output = serializeDownloadsModule(
+      [{ key: "quoted", path: '/downloads/A "quoted" \\ path.pdf' }],
+      "/",
+    );
+
+    expect(output).toContain(
+      'path: "/downloads/A \\"quoted\\" \\\\ path.pdf"',
+    );
+  });
+
+  it("bakes the base URL into serialized download paths", () => {
+    const output = serializeDownloadsModule(
+      [{ key: "eins", path: "/downloads/eins.pdf" }],
+      "/zfl-website/previews/test-branch",
+    );
+
+    expect(output).toContain(
+      'path: "/zfl-website/previews/test-branch/downloads/eins.pdf"',
+    );
+  });
+});
+
+// =============================================================================
+// Unit Tests: Download Key Derivation
+// =============================================================================
+
+describe("toDownloadKey", () => {
+  it("converts a file name to camelCase and strips the extension", () => {
+    expect(toDownloadKey("/Prinzipien-Poster.pdf")).toBe("prinzipienPoster");
+  });
+
+  it("joins nested folder segments with underscores", () => {
+    expect(toDownloadKey("/sub/nested-file.pdf")).toBe("sub_nestedFile");
+  });
+
+  it("drops unsupported characters while stripping the extension", () => {
+    expect(toDownloadKey("/2026-report.pdf")).toBe("2026Report");
+  });
+
+  it("handles files without an extension", () => {
+    expect(toDownloadKey("/readme")).toBe("readme");
   });
 });
 
