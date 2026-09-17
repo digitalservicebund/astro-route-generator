@@ -1,3 +1,9 @@
+## [0.2.3](https://github.com/digitalservicebund/astro-route-generator/compare/0.2.2..0.2.3) - 2026-09-17
+
+### 🐛 Bug Fixes
+
+- **toDownloadKey:** include extension to avoid key collisions - ([bc3ab9c](https://github.com/digitalservicebund/astro-route-generator/commit/bc3ab9c632868017201f97926fb022e86b15c0a0))
+
 ## [0.2.2](https://github.com/digitalservicebund/astro-route-generator/compare/0.2.1..0.2.2) - 2026-09-17
 
 ### 💼 Other
