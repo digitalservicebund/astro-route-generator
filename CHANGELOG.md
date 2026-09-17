@@ -1,3 +1,9 @@
+## [0.2.5](https://github.com/digitalservicebund/astro-route-generator/compare/0.2.4..0.2.5) - 2026-09-17
+
+### 🐛 Bug Fixes
+
+- **toRouteKey:** handle all-caps filenames - ([9900505](https://github.com/digitalservicebund/astro-route-generator/commit/9900505bc61e16d6d11c2884d1bd95c019b32bc6))
+
 ## [0.2.4](https://github.com/digitalservicebund/astro-route-generator/compare/0.2.3..0.2.4) - 2026-09-17
 
 ### 📚 Documentation
