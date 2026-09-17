@@ -593,6 +593,10 @@ describe("toDownloadKey", () => {
   it("lowercases the extension", () => {
     expect(toDownloadKey("/test.JSON")).toBe("test_json");
   });
+
+  it("normalizes all-caps base names", () => {
+    expect(toDownloadKey("/TEMPLATE-neu.docx")).toBe("templateNeu_docx");
+  });
 });
 
 // =============================================================================
@@ -722,6 +726,10 @@ describe("toRouteKey", () => {
 
   it("converts root to home", () => {
     expect(toRouteKey("/")).toBe("home");
+  });
+
+  it("normalizes all-caps words instead of preserving inner uppercase", () => {
+    expect(toRouteKey("/TEMPLATE-neu")).toBe("templateNeu");
   });
 });
 

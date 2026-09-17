@@ -249,11 +249,10 @@ export function toRouteKey(input: string): string {
           // Normalize each path segment independently before joining nested segments with `_`.
           .split(/[-_]/)
           .filter(Boolean)
-          .map((part, i) =>
-            i === 0
-              ? part[0].toLowerCase() + part.slice(1)
-              : part[0].toUpperCase() + part.slice(1),
-          )
+          .map((part, i) => {
+            const lower = part.toLowerCase();
+            return i === 0 ? lower : lower[0].toUpperCase() + lower.slice(1);
+          })
           .join(""),
       )
       .join("_")
