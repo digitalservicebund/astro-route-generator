@@ -211,6 +211,25 @@ function getAllFiles(dir: string): string[] {
     });
 }
 
+const GERMAN_TRANSLITERATIONS: Record<string, string> = {
+  ä: "ae",
+  ö: "oe",
+  ü: "ue",
+  Ä: "Ae",
+  Ö: "Oe",
+  Ü: "Ue",
+  ß: "ss",
+};
+
+// Transliterate German umlauts/ß to their ASCII digraphs so they survive as
+// letters instead of being silently dropped by the character filter below.
+function transliterateGerman(input: string): string {
+  return input.replaceAll(
+    /[äöüÄÖÜß]/g,
+    (char) => GERMAN_TRANSLITERATIONS[char],
+  );
+}
+
 export function toRouteKey(input: string): string {
   if (input === "/") return "home";
 
@@ -220,7 +239,7 @@ export function toRouteKey(input: string): string {
       .split("/")
       .filter(Boolean)
       .map((segment) =>
-        segment
+        transliterateGerman(segment)
           .replaceAll(/[^a-zA-Z0-9-_]/g, "")
           // Normalize each path segment independently before joining nested segments with `_`.
           .split(/[-_]/)

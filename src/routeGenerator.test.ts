@@ -570,6 +570,12 @@ describe("toDownloadKey", () => {
   it("handles files without an extension", () => {
     expect(toDownloadKey("/readme")).toBe("readme");
   });
+
+  it("transliterates German umlauts instead of dropping them", () => {
+    expect(toDownloadKey("/Checkliste-Interviewführung.docx")).toBe(
+      "checklisteInterviewfuehrung",
+    );
+  });
 });
 
 // =============================================================================
@@ -688,6 +694,13 @@ describe("toRouteKey", () => {
 
   it("drops unsupported characters while preserving route structure", () => {
     expect(toRouteKey("/ueber-uns/2026-&-mehr")).toBe("ueberUns_2026Mehr");
+  });
+
+  it("transliterates German umlauts and ß instead of dropping them", () => {
+    expect(toRouteKey("/Checkliste-Interviewführung")).toBe(
+      "checklisteInterviewfuehrung",
+    );
+    expect(toRouteKey("/Straße")).toBe("strasse");
   });
 
   it("converts root to home", () => {
