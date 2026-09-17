@@ -30,6 +30,8 @@ jobs:
 
       - run: pnpm typecheck
 
+      - run: pnpm lint
+
   release:
     needs: check
     if: github.ref == 'refs/heads/main'
