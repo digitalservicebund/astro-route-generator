@@ -21,7 +21,7 @@
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^26.6.2",
-    "astro": "^7.3.2",
+    "astro": "^7.3.3",
     "oxlint": "^1.83.0",
     "vitest": "^5.0.1"
   },
