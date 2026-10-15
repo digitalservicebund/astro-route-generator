@@ -23,7 +23,7 @@
     "@types/node": "^26.6.5",
     "astro": "^7.3.8",
     "oxlint": "^1.87.0",
-    "vitest": "^5.0.3"
+    "vitest": "^5.0.4"
   },
   "packageManager": "pnpm@12.9.1"
 }
