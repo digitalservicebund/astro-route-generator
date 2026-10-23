@@ -1,3 +1,19 @@
+## [0.2.8](https://github.com/digitalservicebund/astro-route-generator/compare/0.2.7..0.2.8) - 2026-10-23
+
+### 💼 Other
+
+- **deps:** bump taiki-e/install-action from 2.87.23 to 2.87.24 (#145) - ([a058a9c](https://github.com/digitalservicebund/astro-route-generator/commit/a058a9c9e819ae3d6573f97e40aa91524683acac))
+- **deps:** bump taiki-e/install-action from 2.87.24 to 2.87.25 (#146) - ([b5bac25](https://github.com/digitalservicebund/astro-route-generator/commit/b5bac250fa625d2fdbdecb933f2986c82521bf88))
+- **deps:** bump taiki-e/install-action from 2.87.25 to 2.87.26 (#147) - ([de0574e](https://github.com/digitalservicebund/astro-route-generator/commit/de0574e6210822dbc6f482854c227246714eba45))
+- **deps:** bump taiki-e/install-action from 2.87.26 to 2.87.27 (#148) - ([5660542](https://github.com/digitalservicebund/astro-route-generator/commit/5660542a5219bfc108ad6445b00d798b20ebd5bb))
+- **deps:** bump taiki-e/install-action from 2.87.27 to 2.87.28 (#152) - ([99f0c45](https://github.com/digitalservicebund/astro-route-generator/commit/99f0c459305a8c77a65cb8c7e3c5e9a33d271474))
+- **deps:** bump taiki-e/install-action from 2.87.28 to 2.87.29 (#155) - ([054eb3b](https://github.com/digitalservicebund/astro-route-generator/commit/054eb3b416980bd24808addb389efa88563afbc9))
+- **deps:** bump actions/setup-node from 7.0.0 to 7.1.0 (#149) - ([9a97a87](https://github.com/digitalservicebund/astro-route-generator/commit/9a97a87776f6772350a1cc8c5903cfb9f7d4e10d))
+- **deps-dev:** bump @types/node from 26.6.4 to 26.6.5 (#150) - ([f3c826d](https://github.com/digitalservicebund/astro-route-generator/commit/f3c826d009780a6337a2dac8482cfd25822e13ac))
+- **deps-dev:** bump astro from 7.3.6 to 7.3.8 (#151) - ([dcbe394](https://github.com/digitalservicebund/astro-route-generator/commit/dcbe394e2d01a219c7182d2f70c817065f25d43f))
+- **deps-dev:** bump vitest from 5.0.3 to 5.0.4 (#153) - ([04a46cc](https://github.com/digitalservicebund/astro-route-generator/commit/04a46ccc2582812348c54cf0e36f8dbc813fdf6b))
+- **deps-dev:** bump vitest from 5.0.4 to 5.0.5 (#157) - ([36a1506](https://github.com/digitalservicebund/astro-route-generator/commit/36a15067648e16c6ee1752bdd96fff5d6681449c))
+
 ## [0.2.7](https://github.com/digitalservicebund/astro-route-generator/compare/0.2.6..0.2.7) - 2026-10-07
 
 ### 💼 Other
