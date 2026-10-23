@@ -15,14 +15,14 @@
     "astro": ">=4.0.0"
   },
   "dependencies": {
-    "js-yaml": "^5.4.3",
+    "js-yaml": "^5.5.0",
     "typescript": "^6.0.3"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^26.6.5",
-    "astro": "^7.4.1",
-    "oxlint": "^1.87.0",
+    "astro": "^7.4.2",
+    "oxlint": "^1.89.0",
     "vitest": "^5.0.5"
   },
   "packageManager": "pnpm@12.9.1"
