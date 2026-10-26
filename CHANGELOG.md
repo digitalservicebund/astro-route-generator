@@ -1,3 +1,9 @@
+## [0.4.0](https://github.com/digitalservicebund/astro-route-generator/compare/0.3.0..0.4.0) - 2026-10-26
+
+### 🚀 Features
+
+-  [**breaking**]make navOrder, navLabel and navEyebrow optional - ([f8c9649](https://github.com/digitalservicebund/astro-route-generator/commit/f8c9649d186a77dfa552872635d731c883f1152d))
+
 ## [0.3.0](https://github.com/digitalservicebund/astro-route-generator/compare/0.2.7..0.3.0) - 2026-10-26
 
 ### 🚀 Features
