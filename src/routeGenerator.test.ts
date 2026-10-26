@@ -350,6 +350,10 @@ describe("generateRoutes() Integration Hook", () => {
         path.resolve(OUTPUT_FILE),
         expect.stringContaining("navLabel: null,"),
       );
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        path.resolve(OUTPUT_FILE),
+        expect.stringContaining("navEyebrow: null,"),
+      );
     });
 
     it("bakes the configured Astro base path into serialized route paths", () => {
@@ -374,6 +378,7 @@ describe("generateRoutes() Integration Hook", () => {
           frontmatter: `const frontmatter = {
   title: 'A "quoted" title \\\\ path',
   navLabel: 'Label "Q" \\\\ path',
+  navEyebrow: 'Eyebrow "Q" \\\\ path',
 };`,
         },
       ]);
@@ -384,6 +389,9 @@ describe("generateRoutes() Integration Hook", () => {
       );
       expect(getWrittenOutput()).toContain(
         'navLabel: "Label \\"Q\\" \\\\ path"',
+      );
+      expect(getWrittenOutput()).toContain(
+        'navEyebrow: "Eyebrow \\"Q\\" \\\\ path"',
       );
     });
 
@@ -616,6 +624,7 @@ describe("serializeRoutesModule", () => {
           isStagingOnly: false,
           navOrder: null,
           navLabel: null,
+          navEyebrow: null,
         },
         {
           key: "eins",
@@ -626,6 +635,7 @@ describe("serializeRoutesModule", () => {
           isStagingOnly: false,
           navOrder: null,
           navLabel: null,
+          navEyebrow: null,
         },
       ],
       "/",
@@ -648,6 +658,7 @@ describe("serializeRoutesModule", () => {
           isStagingOnly: false,
           navOrder: null,
           navLabel: 'Label "Q"',
+          navEyebrow: 'Eyebrow "Q"',
         },
       ],
       "/",
@@ -657,6 +668,7 @@ describe("serializeRoutesModule", () => {
     expect(output).toContain('key: "2026News"');
     expect(output).toContain('title: "A \\"quoted\\" title"');
     expect(output).toContain('navLabel: "Label \\"Q\\""');
+    expect(output).toContain('navEyebrow: "Eyebrow \\"Q\\""');
   });
 
   it("emits parent as a variable reference for nested routes", () => {
@@ -671,6 +683,7 @@ describe("serializeRoutesModule", () => {
           isStagingOnly: false,
           navOrder: null,
           navLabel: null,
+          navEyebrow: null,
         },
         {
           key: "ueber_daranArbeitenWir",
@@ -681,6 +694,7 @@ describe("serializeRoutesModule", () => {
           isStagingOnly: false,
           navOrder: null,
           navLabel: null,
+          navEyebrow: null,
         },
       ],
       "/",

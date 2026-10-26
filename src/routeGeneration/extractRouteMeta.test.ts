@@ -12,6 +12,7 @@ export const frontmatter = {
   isStagingOnly: true,
   navOrder: 20,
   navLabel: "Navigation label",
+  navEyebrow: "Step 1",
 };
 ---
 `,
@@ -23,6 +24,7 @@ export const frontmatter = {
       isStagingOnly: true,
       navOrder: 20,
       navLabel: "Navigation label",
+      navEyebrow: "Step 1",
     });
   });
 
@@ -60,6 +62,7 @@ export const frontmatter = {
       isStagingOnly: false,
       navOrder: null,
       navLabel: null,
+      navEyebrow: null,
     });
   });
 
@@ -81,6 +84,7 @@ export const frontmatter = {
       isStagingOnly: false,
       navOrder: null,
       navLabel: null,
+      navEyebrow: null,
     });
   });
 
@@ -102,6 +106,7 @@ sitemap: false
 isStagingOnly: true
 navOrder: 5
 navLabel: Navigation label
+navEyebrow: Step 1
 ---
 `,
       );
@@ -112,6 +117,7 @@ navLabel: Navigation label
         isStagingOnly: true,
         navOrder: 5,
         navLabel: "Navigation label",
+        navEyebrow: "Step 1",
       });
     },
   );

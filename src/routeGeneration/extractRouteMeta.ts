@@ -25,6 +25,7 @@ const ROUTE_META_KEYS = [
   "isStagingOnly",
   "navOrder",
   "navLabel",
+  "navEyebrow",
 ] as const satisfies RouteMetaKey[];
 
 function isRouteMetaKey(key: string): key is RouteMetaKey {
@@ -45,6 +46,7 @@ export function extractMeta(file: string, raw: string): RouteMeta | null {
     isStagingOnly: !!data.isStagingOnly,
     navOrder: typeof data.navOrder === "number" ? data.navOrder : null,
     navLabel: typeof data.navLabel === "string" ? data.navLabel : null,
+    navEyebrow: typeof data.navEyebrow === "string" ? data.navEyebrow : null,
   };
 }
 

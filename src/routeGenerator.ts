@@ -17,6 +17,7 @@ export type RouteMeta = {
   isStagingOnly: boolean;
   navOrder: number | null;
   navLabel: string | null;
+  navEyebrow: string | null;
 };
 
 export type Route = RouteMeta & {
@@ -286,6 +287,7 @@ const ROUTE_TYPE = `export type Route = {
   readonly isStagingOnly: boolean;
   readonly navOrder: number | null;
   readonly navLabel: string | null;
+  readonly navEyebrow: string | null;
 };`;
 
 export function serializeRoutesModule(routes: Route[], baseUrl: string) {
@@ -304,6 +306,7 @@ export function serializeRoutesModule(routes: Route[], baseUrl: string) {
         isStagingOnly,
         navOrder,
         navLabel,
+        navEyebrow,
       }) =>
         `export const ${toExportName(key)} = {
   key: ${escapeStringLiteral(key)},
@@ -314,6 +317,7 @@ export function serializeRoutesModule(routes: Route[], baseUrl: string) {
   isStagingOnly: ${isStagingOnly},
   navOrder: ${navOrder ?? "null"},
   navLabel: ${escapeStringLiteral(navLabel)},
+  navEyebrow: ${escapeStringLiteral(navEyebrow)},
 } as const;`,
     )
     .join("\n\n");

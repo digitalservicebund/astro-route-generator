@@ -71,6 +71,7 @@ Routes are picked up from frontmatter. Supported fields:
 | `isStagingOnly` | `boolean` | `false`  | Hide the route in production builds.                   |
 | `navOrder`      | `number`  | `null`   | Position in navigation menus.                          |
 | `navLabel`      | `string`  | `null`   | Override the navigation label (falls back to `title`). |
+| `navEyebrow`    | `string`  | `null`   | Short text above the navigation label, e.g. "Step 1".  |
 
 **`.astro` pages** — declare a `frontmatter` export as a plain object literal:
 
