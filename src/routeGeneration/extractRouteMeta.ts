@@ -44,9 +44,10 @@ export function extractMeta(file: string, raw: string): RouteMeta | null {
     title,
     sitemap: data.sitemap !== false,
     isStagingOnly: !!data.isStagingOnly,
-    navOrder: typeof data.navOrder === "number" ? data.navOrder : null,
-    navLabel: typeof data.navLabel === "string" ? data.navLabel : null,
-    navEyebrow: typeof data.navEyebrow === "string" ? data.navEyebrow : null,
+    // Optional, so routes without them (and hand-built ones) can omit them
+    ...(typeof data.navOrder === "number" && { navOrder: data.navOrder }),
+    ...(typeof data.navLabel === "string" && { navLabel: data.navLabel }),
+    ...(typeof data.navEyebrow === "string" && { navEyebrow: data.navEyebrow }),
   };
 }
 

@@ -329,7 +329,7 @@ describe("generateRoutes() Integration Hook", () => {
       expect(output).toContain("] as const;");
     });
 
-    it("serializes nullable route metadata as null literals", () => {
+    it("serializes parent as null and omits unset optional metadata", () => {
       mockPages([
         {
           path: "index.astro",
@@ -346,14 +346,8 @@ describe("generateRoutes() Integration Hook", () => {
         path.resolve(OUTPUT_FILE),
         expect.stringContaining('key: "home"'),
       );
-      expect(fs.writeFileSync).toHaveBeenCalledWith(
-        path.resolve(OUTPUT_FILE),
-        expect.stringContaining("navLabel: null,"),
-      );
-      expect(fs.writeFileSync).toHaveBeenCalledWith(
-        path.resolve(OUTPUT_FILE),
-        expect.stringContaining("navEyebrow: null,"),
-      );
+      // Optional fields are omitted, not serialized as null
+      expect(getWrittenOutput()).not.toMatch(/nav(Order|Label|Eyebrow):/);
     });
 
     it("bakes the configured Astro base path into serialized route paths", () => {
@@ -622,9 +616,6 @@ describe("serializeRoutesModule", () => {
           parentKey: null,
           sitemap: true,
           isStagingOnly: false,
-          navOrder: null,
-          navLabel: null,
-          navEyebrow: null,
         },
         {
           key: "eins",
@@ -633,9 +624,6 @@ describe("serializeRoutesModule", () => {
           parentKey: null,
           sitemap: true,
           isStagingOnly: false,
-          navOrder: null,
-          navLabel: null,
-          navEyebrow: null,
         },
       ],
       "/",
@@ -656,7 +644,6 @@ describe("serializeRoutesModule", () => {
           parentKey: null,
           sitemap: true,
           isStagingOnly: false,
-          navOrder: null,
           navLabel: 'Label "Q"',
           navEyebrow: 'Eyebrow "Q"',
         },
@@ -671,6 +658,26 @@ describe("serializeRoutesModule", () => {
     expect(output).toContain('navEyebrow: "Eyebrow \\"Q\\""');
   });
 
+  it("serializes optional metadata only when set", () => {
+    const output = serializeRoutesModule(
+      [
+        {
+          key: "home",
+          path: "/",
+          title: "Home",
+          parentKey: null,
+          sitemap: true,
+          isStagingOnly: false,
+          navOrder: 0,
+        },
+      ],
+      "/",
+    );
+
+    expect(output).toContain("navOrder: 0,");
+    expect(output).not.toMatch(/nav(Label|Eyebrow):/);
+  });
+
   it("emits parent as a variable reference for nested routes", () => {
     const output = serializeRoutesModule(
       [
@@ -681,9 +688,6 @@ describe("serializeRoutesModule", () => {
           parentKey: null,
           sitemap: true,
           isStagingOnly: false,
-          navOrder: null,
-          navLabel: null,
-          navEyebrow: null,
         },
         {
           key: "ueber_daranArbeitenWir",
@@ -692,9 +696,6 @@ describe("serializeRoutesModule", () => {
           parentKey: "ueber",
           sitemap: true,
           isStagingOnly: false,
-          navOrder: null,
-          navLabel: null,
-          navEyebrow: null,
         },
       ],
       "/",
@@ -778,10 +779,6 @@ describe("toExportName", () => {
 });
 
 describe("escapeStringLiteral", () => {
-  it("serializes null as the literal null", () => {
-    expect(escapeStringLiteral(null)).toBe("null");
-  });
-
   it("escapes quotes and backslashes in strings", () => {
     expect(escapeStringLiteral('A "quoted" \\ path')).toBe(
       '"A \\"quoted\\" \\\\ path"',

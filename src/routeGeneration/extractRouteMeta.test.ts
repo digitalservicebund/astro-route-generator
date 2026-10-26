@@ -60,9 +60,6 @@ export const frontmatter = {
       title: "Example",
       sitemap: true,
       isStagingOnly: false,
-      navOrder: null,
-      navLabel: null,
-      navEyebrow: null,
     });
   });
 
@@ -82,9 +79,6 @@ export const frontmatter = {
       title: "Example",
       sitemap: true,
       isStagingOnly: false,
-      navOrder: null,
-      navLabel: null,
-      navEyebrow: null,
     });
   });
 

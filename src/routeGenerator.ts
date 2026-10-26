@@ -15,9 +15,9 @@ export type RouteMeta = {
   title: string;
   sitemap: boolean;
   isStagingOnly: boolean;
-  navOrder: number | null;
-  navLabel: string | null;
-  navEyebrow: string | null;
+  navOrder?: number;
+  navLabel?: string;
+  navEyebrow?: string;
 };
 
 export type Route = RouteMeta & {
@@ -285,9 +285,9 @@ const ROUTE_TYPE = `export type Route = {
   readonly parent: Route | null;
   readonly sitemap: boolean;
   readonly isStagingOnly: boolean;
-  readonly navOrder: number | null;
-  readonly navLabel: string | null;
-  readonly navEyebrow: string | null;
+  readonly navOrder?: number;
+  readonly navLabel?: string;
+  readonly navEyebrow?: string;
 };`;
 
 export function serializeRoutesModule(routes: Route[], baseUrl: string) {
@@ -307,18 +307,23 @@ export function serializeRoutesModule(routes: Route[], baseUrl: string) {
         navOrder,
         navLabel,
         navEyebrow,
-      }) =>
-        `export const ${toExportName(key)} = {
-  key: ${escapeStringLiteral(key)},
-  path: ${escapeStringLiteral(buildRoutePath(path, baseUrl))},
-  title: ${escapeStringLiteral(title)},
-  parent: ${parentKey ? toExportName(parentKey) : "null"},
-  sitemap: ${sitemap},
-  isStagingOnly: ${isStagingOnly},
-  navOrder: ${navOrder ?? "null"},
-  navLabel: ${escapeStringLiteral(navLabel)},
-  navEyebrow: ${escapeStringLiteral(navEyebrow)},
-} as const;`,
+      }) => {
+        const lines = [
+          `  key: ${escapeStringLiteral(key)},`,
+          `  path: ${escapeStringLiteral(buildRoutePath(path, baseUrl))},`,
+          `  title: ${escapeStringLiteral(title)},`,
+          `  parent: ${parentKey ? toExportName(parentKey) : "null"},`,
+          `  sitemap: ${sitemap},`,
+          `  isStagingOnly: ${isStagingOnly},`,
+          // Optional fields are omitted when not set in the frontmatter
+          navOrder !== undefined && `  navOrder: ${navOrder},`,
+          navLabel !== undefined &&
+            `  navLabel: ${escapeStringLiteral(navLabel)},`,
+          navEyebrow !== undefined &&
+            `  navEyebrow: ${escapeStringLiteral(navEyebrow)},`,
+        ].filter(Boolean);
+        return `export const ${toExportName(key)} = {\n${lines.join("\n")}\n} as const;`;
+      },
     )
     .join("\n\n");
 
@@ -343,11 +348,9 @@ export function toExportName(routeKey: string): string {
   return /^[A-Za-z_$]/.test(routeKey) ? routeKey : `_${routeKey}`;
 }
 
-// Serialize nullable values as JS string literals or the literal null.
-export function escapeStringLiteral(input: string | null): string {
-  return input === null
-    ? "null"
-    : `"${input.replaceAll("\\", "\\\\").replaceAll('"', '\\"')}"`;
+// Serialize values as JS string literals.
+export function escapeStringLiteral(input: string): string {
+  return `"${input.replaceAll("\\", "\\\\").replaceAll('"', '\\"')}"`;
 }
 
 function removeTrailingSlash(path: string): string {
