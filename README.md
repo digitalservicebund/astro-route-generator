@@ -124,3 +124,18 @@ To undo, in the consuming project:
 ```sh
 pnpm unlink astro-route-generator
 ```
+
+## Releases
+
+Releases are fully automated. On every push to `main`, CI uses [git-cliff](https://git-cliff.org) to check the commits since the last tag. If any of them count toward a release, CI bumps the version in `package.json`, updates `CHANGELOG.md`, tags the release commit and creates a GitHub Release.
+
+The commit prefix ([Conventional Commits](https://www.conventionalcommits.org)) decides the version bump:
+
+| Commit                                                                                             | Release                     |
+| -------------------------------------------------------------------------------------------------- | --------------------------- |
+| `feat: …`                                                                                          | minor                       |
+| `feat!: …` / `BREAKING CHANGE:` footer                                                             | minor (while on `0.x`)      |
+| Any other conventional commit (`fix:`, `docs:`, `build(deps):` for runtime dependencies, `ci:`, …) | patch                       |
+| `chore(deps): …`, `chore(deps-dev): …`, `chore(release): …`                                        | none (not in the changelog) |
+
+Dependabot is configured so that dev-dependency and GitHub Actions updates use `chore(deps…)` and don't trigger a release. Runtime dependency updates use `build(deps)` and do.
