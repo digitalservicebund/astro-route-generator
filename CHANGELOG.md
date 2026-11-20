@@ -1,3 +1,9 @@
+## [0.4.3](https://github.com/digitalservicebund/astro-route-generator/compare/0.4.2..0.4.3) - 2026-11-20
+
+### 💼 Other
+
+- **deps:** bump dependencies - ([cdb8eea](https://github.com/digitalservicebund/astro-route-generator/commit/cdb8eea8221977f331b2801575b2fb1fbcb97ec0))
+
 ## [0.4.2](https://github.com/digitalservicebund/astro-route-generator/compare/0.4.1..0.4.2) - 2026-11-20
 
 ### 📚 Documentation
