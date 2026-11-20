@@ -1,3 +1,9 @@
+## [0.4.2](https://github.com/digitalservicebund/astro-route-generator/compare/0.4.1..0.4.2) - 2026-11-20
+
+### 📚 Documentation
+
+- **readme:** explain the automated release process - ([256ac76](https://github.com/digitalservicebund/astro-route-generator/commit/256ac7659c5e9cd573d1574d3e0ce0c4d46e4ebc))
+
 ## [0.4.1](https://github.com/digitalservicebund/astro-route-generator/compare/0.4.0..0.4.1) - 2026-11-20
 
 ### 💼 Other
