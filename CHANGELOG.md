@@ -1,3 +1,29 @@
+## [0.4.1](https://github.com/digitalservicebund/astro-route-generator/compare/0.4.0..0.4.1) - 2026-11-20
+
+### 💼 Other
+
+- **deps:** bump taiki-e/install-action from 2.87.29 to 2.87.31 (#161) - ([d808298](https://github.com/digitalservicebund/astro-route-generator/commit/d808298b6cc8f057bb0ea6578f291d911314991d))
+- **deps:** bump taiki-e/install-action from 2.87.31 to 2.87.32 (#162) - ([9409b9c](https://github.com/digitalservicebund/astro-route-generator/commit/9409b9c66998e9be9e3248e3c64949a1ef942076))
+- **deps:** bump pnpm/action-setup from 6.1.0 to 6.1.1 (#172) - ([d399b60](https://github.com/digitalservicebund/astro-route-generator/commit/d399b60e95bf0988936dbf8cfd3d9def059911be))
+- **deps:** bump taiki-e/install-action from 2.87.32 to 2.90.3 (#177) - ([69ee7ba](https://github.com/digitalservicebund/astro-route-generator/commit/69ee7ba40104872a54097c6b2e21cdfdf423dee3))
+- **deps:** bump taiki-e/install-action from 2.90.3 to 2.90.4 (#182) - ([8eacb83](https://github.com/digitalservicebund/astro-route-generator/commit/8eacb83c745f73c17b0f08649ed80780a613a75a))
+- **deps:** bump taiki-e/install-action from 2.90.4 to 2.90.5 (#183) - ([ac97804](https://github.com/digitalservicebund/astro-route-generator/commit/ac9780461f42a9dfad985cdfee499b7d380c7e22))
+- **deps-dev:** bump astro from 7.4.2 to 7.4.4 (#165) - ([0da2aa0](https://github.com/digitalservicebund/astro-route-generator/commit/0da2aa0f3c9b2dca29cdf293080a078d20f28a72))
+- **deps-dev:** bump @types/node from 26.6.5 to 26.6.6 (#166) - ([5e43dd9](https://github.com/digitalservicebund/astro-route-generator/commit/5e43dd9175c1a0581fef03dca4bdcb71998ff72d))
+- **deps-dev:** bump astro from 7.4.4 to 7.4.5 (#170) - ([e911ff0](https://github.com/digitalservicebund/astro-route-generator/commit/e911ff0d3da30e6fddef9e436dbfeaed668ef3ab))
+- **deps-dev:** bump astro from 7.4.5 to 7.4.7 (#175) - ([2f55434](https://github.com/digitalservicebund/astro-route-generator/commit/2f5543405eea78ef12e0e9b7a3474ccf28de99cc))
+- **deps-dev:** bump astro from 7.4.7 to 7.4.8 (#178) - ([6f27806](https://github.com/digitalservicebund/astro-route-generator/commit/6f2780680c3160b93f049ea4744bf9fe9a94ddc5))
+- **deps-dev:** bump astro from 7.4.8 to 7.4.9 (#180) - ([619f0a0](https://github.com/digitalservicebund/astro-route-generator/commit/619f0a02344bdcd3e9aeec900f0c3ffacd41b291))
+- **deps-dev:** bump oxlint from 1.89.0 to 1.93.0 (#179) - ([932de53](https://github.com/digitalservicebund/astro-route-generator/commit/932de53b44e3ac81c83b9066596c24c3a1e6a45b))
+- **deps-dev:** bump vitest from 5.0.5 to 5.1.0 (#169) - ([a1f4672](https://github.com/digitalservicebund/astro-route-generator/commit/a1f4672232157d160afee464abbadccd7999bcd3))
+- **deps-dev:** bump astro from 7.4.9 to 7.4.12 (#181) - ([6cdebd5](https://github.com/digitalservicebund/astro-route-generator/commit/6cdebd52837221c416b2c845646d75dfc80b9e59))
+- **deps-dev:** bump oxlint from 1.93.0 to 1.94.0 (#184) - ([304475a](https://github.com/digitalservicebund/astro-route-generator/commit/304475a3717efd3cf4bc34ce4e3df9ea9f23be26))
+
+### ⚙️ Miscellaneous Tasks
+
+- **dependabot:** only release on runtime dependency bumps - ([df72a2e](https://github.com/digitalservicebund/astro-route-generator/commit/df72a2e955b2e93c30cb36ff151bf59539f255e0))
+- **release:** push release commit and tag atomically - ([dd176b9](https://github.com/digitalservicebund/astro-route-generator/commit/dd176b9b47ed5228c80d2a76819c3fef23373744))
+
 ## [0.4.0](https://github.com/digitalservicebund/astro-route-generator/compare/0.3.0..0.4.0) - 2026-10-26
 
 ### 🚀 Features
