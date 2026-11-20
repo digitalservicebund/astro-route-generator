@@ -9,7 +9,18 @@ updates:
       interval: "daily"
     cooldown:
       default-days: 3
+    # Conventional-commit prefixes control what git-cliff releases (see cliff.toml):
+    # runtime deps -> build(deps): ... (released as patch)
+    # dev deps     -> chore(deps-dev): ... (skipped)
+    commit-message:
+      prefix: "build"
+      prefix-development: "chore"
+      include: "scope"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
+    # chore(deps): ... (skipped by cliff.toml, CI tooling doesn't warrant a release)
+    commit-message:
+      prefix: "chore"
+      include: "scope"
